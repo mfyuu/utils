@@ -26,6 +26,9 @@
 	"files": [
 		"dist"
 	],
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"prepare": "node -e \"if(process.env.CI !== 'true') { require('child_process').execSync('lefthook install', {stdio: 'inherit'}) }\"",
