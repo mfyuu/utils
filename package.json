@@ -1,7 +1,7 @@
 {
 	"name": "@mfyuu/utils",
 	"type": "module",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Opinionated collection of common JavaScript / TypeScript utils by @mfyuu",
 	"author": "mfyuu",
 	"license": "MIT",
