@@ -35,7 +35,7 @@
 		"lint": "biome lint .",
 		"lint-fix": "biome lint --write .",
 		"check": "biome check --write .",
-		"prepublishOnly": "pnpm run build",
+		"prepublishOnly": "nr build",
 		"start": "tsx src/index.ts",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest",
