@@ -28,7 +28,7 @@
 	],
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
-		"prepare": "if [ \"$CI\" != \"true\" ]; then lefthook install; fi",
+		"prepare": "node -e \"if(process.env.CI !== 'true') { require('child_process').execSync('lefthook install', {stdio: 'inherit'}) }\"",
 		"build": "unbuild",
 		"dev": "unbuild --stub",
 		"format": "biome format --write .",
