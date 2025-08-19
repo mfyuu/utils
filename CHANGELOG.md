@@ -1,5 +1,14 @@
 # @mfyuu/utils
 
+## 0.1.2
+
+### Patch Changes
+
+- [`2623529`](https://github.com/mfyuu/utils/commit/2623529c79f641ebcd0496440a675af96aa60e5f) Thanks [@mfyuu](https://github.com/mfyuu)! - Fix npm publish configuration for scoped package
+
+  - Add publishConfig with public access to enable npm publishing
+  - Resolve E404 error when publishing @mfyuu/utils to npm registry
+
 ## 0.1.1
 
 ### Patch Changes
