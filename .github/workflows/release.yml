@@ -39,6 +39,8 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+        env:
+          CI: true # for Disable lefthook in CI
 
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1

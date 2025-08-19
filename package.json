@@ -28,7 +28,7 @@
 	],
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
-		"prepare": "lefthook install",
+		"prepare": "if [ \"$CI\" != \"true\" ]; then lefthook install; fi",
 		"build": "unbuild",
 		"dev": "unbuild --stub",
 		"format": "biome format --write .",
