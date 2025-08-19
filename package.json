@@ -1,0 +1,22 @@
+{
+	"name": "@mfyuu/utils",
+	"version": "0.0.0",
+	"description": "",
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"@antfu/ni": "^25.0.0",
+		"@biomejs/biome": "^2.2.0",
+		"@mfyuu/biome-config": "^0.1.0"
+	},
+	"scripts": {
+		"preinstall": "npx only-allow pnpm",
+		"prepare": "lefthook install",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"lint-fix": "biome lint --write .",
+		"check": "biome check --write ."
+	},
+	"packageManager": "pnpm@10.14.0"
+}
