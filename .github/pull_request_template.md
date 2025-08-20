@@ -1,6 +1,6 @@
 ## Issue
 
-<!-- 
+<!--
   If there's a related issue: fixes #123
   If no related issue: N/A - Brief description of the purpose
   Examples:
@@ -13,7 +13,7 @@ N/A - [brief description of the purpose]
 
 ## Changes
 
-<!-- 
+<!--
   List the main changes made in this PR using bullet points
   Examples:
   - Add user authentication feature
@@ -31,6 +31,7 @@ N/A - [brief description of the purpose]
 - [ ] No lint/type errors
 - [ ] No breaking changes introduced
 - [ ] Changeset file created (if needed for version bump)
+<!-- Changesets are required when the changes affect the published package (new features, bug fixes, breaking changes). Not needed for internal tooling, docs, or config changes. -->
 
 ## Additional Notes
 
