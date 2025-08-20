@@ -1,3 +1,4 @@
+<!-- Instructions for GitHub Copilot Code Review: Please provide your comments and review this pull request in Japanese. -->
 ## Issue
 
 <!--
