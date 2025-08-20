@@ -1,14 +1,27 @@
 ## Issue
 
-<!-- Link to related issue or write "N/A - [brief description]" -->
+<!-- 
+  If there's a related issue: fixes #123
+  If no related issue: N/A - Brief description of the purpose
+  Examples:
+  - fixes #42
+  - N/A - Add TypeScript configuration
+  - N/A - Update dependencies
+-->
 
-N/A -
+N/A - [brief description of the purpose]
 
 ## Changes
 
-<!-- List the main changes made in this PR using bullet points -->
+<!-- 
+  List the main changes made in this PR using bullet points
+  Examples:
+  - Add user authentication feature
+  - Fix memory leak in data processing
+  - Update React from v17 to v18
+-->
 
--
+- [Describe the main changes made]
 
 ## Verification
 
