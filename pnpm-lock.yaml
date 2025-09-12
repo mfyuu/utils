@@ -21,8 +21,8 @@ importers:
         specifier: ^2.29.6
         version: 2.29.6(@types/node@24.3.0)
       '@mfyuu/biome-config':
-        specifier: ^0.1.0
-        version: 0.1.2(@biomejs/biome@2.2.4)
+        specifier: ^1.0.0
+        version: 1.3.5(@biomejs/biome@2.2.4)
       '@types/node':
         specifier: ^24.3.0
         version: 24.3.0
@@ -351,8 +351,9 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
-  '@mfyuu/biome-config@0.1.2':
-    resolution: {integrity: sha512-CBhI5KZw5ylgsq7LyUDVm1zCoz8yUXXaIviKRijAOKFi9Kf3ULL+at2/RPMcMq5OM3gCOxafr7f2o/H8ugOriw==}
+  '@mfyuu/biome-config@1.3.5':
+    resolution: {integrity: sha512-1MiqF+w8LihIZJKgrwX7H8QRB7FTLdh9Odm/KI1cgChBM0BuEjQ32N18GJ0WR4YYe5eYSu9vA1HdpADdTDhmWw==}
+    hasBin: true
     peerDependencies:
       '@biomejs/biome': '>=2.0.0'
 
@@ -1958,7 +1959,7 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@mfyuu/biome-config@0.1.2(@biomejs/biome@2.2.4)':
+  '@mfyuu/biome-config@1.3.5(@biomejs/biome@2.2.4)':
     dependencies:
       '@biomejs/biome': 2.2.4
 
