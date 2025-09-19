@@ -47,7 +47,7 @@
 		"release": "nr build && changeset publish"
 	},
 	"devDependencies": {
-		"@antfu/ni": "^25.0.0",
+		"@antfu/ni": "^26.0.0",
 		"@biomejs/biome": "2.2.4",
 		"@changesets/changelog-github": "^0.5.1",
 		"@changesets/cli": "^2.29.6",
