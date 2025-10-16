@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-	resolveQueryArray,
-	resolveQueryBoolean,
-	resolveQueryString,
-} from "./params";
+import { parseAsArr, parseAsBool, parseAsStr } from "./params";
 
 /**
  * 完全なURLからNext.js v15のsearchParams形式に変換するヘルパー
@@ -30,29 +26,29 @@ const parseSearchParams = (
 	return result;
 };
 
-describe("resolveQueryString", () => {
+describe("parseAsStr", () => {
 	describe("requireなし", () => {
 		it("undefinedの場合にnullを返す", () => {
 			const params = parseSearchParams("https://example.com");
-			const result = resolveQueryString(params.name);
+			const result = parseAsStr(params.name);
 			expect(result).toBeNull();
 		});
 
 		it("空文字列の場合にnullを返す", () => {
 			const params = parseSearchParams("https://example.com/?name=");
-			const result = resolveQueryString(params.name);
+			const result = parseAsStr(params.name);
 			expect(result).toBeNull();
 		});
 
 		it("単一の文字列値をそのまま返す", () => {
 			const params = parseSearchParams("https://example.com/?name=hello");
-			const result = resolveQueryString(params.name);
+			const result = parseAsStr(params.name);
 			expect(result).toBe("hello");
 		});
 
 		it("数値形式の文字列も文字列として返す", () => {
 			const params = parseSearchParams("https://example.com/?id=123");
-			const result = resolveQueryString(params.id);
+			const result = parseAsStr(params.id);
 			expect(result).toBe("123");
 		});
 
@@ -60,7 +56,7 @@ describe("resolveQueryString", () => {
 			const params = parseSearchParams(
 				"https://example.com/?email=hello%40example.com",
 			);
-			const result = resolveQueryString(params.email);
+			const result = parseAsStr(params.email);
 			expect(result).toBe("hello@example.com");
 		});
 
@@ -68,7 +64,7 @@ describe("resolveQueryString", () => {
 			const params = parseSearchParams(
 				"https://example.com/?tag=first&tag=second",
 			);
-			const result = resolveQueryString(params.tag);
+			const result = parseAsStr(params.tag);
 			expect(result).toBe("first");
 		});
 
@@ -76,7 +72,7 @@ describe("resolveQueryString", () => {
 			const params = parseSearchParams(
 				"https://example.com/?name=%E3%81%82%E3%81%84%E3%81%86",
 			);
-			const result = resolveQueryString(params.name);
+			const result = parseAsStr(params.name);
 			expect(result).toBe("あいう");
 		});
 	});
@@ -85,35 +81,33 @@ describe("resolveQueryString", () => {
 		describe("デフォルトメッセージ", () => {
 			it("undefinedの場合にデフォルトエラーメッセージを投げる", () => {
 				const params = parseSearchParams("https://example.com");
-				expect(() =>
-					resolveQueryString(params.name, { required: true }),
-				).toThrow("Missing required query parameter");
+				expect(() => parseAsStr(params.name, { required: true })).toThrow(
+					"Missing required query parameter",
+				);
 			});
 
 			it("空文字列の場合にデフォルトエラーメッセージを投げる", () => {
 				const params = parseSearchParams("https://example.com/?name=");
-				expect(() =>
-					resolveQueryString(params.name, { required: true }),
-				).toThrow("Missing required query parameter");
+				expect(() => parseAsStr(params.name, { required: true })).toThrow(
+					"Missing required query parameter",
+				);
 			});
 
 			it("必須指定時に文字列値を正常に返す", () => {
 				const params = parseSearchParams("https://example.com/?name=hello");
-				expect(resolveQueryString(params.name, { required: true })).toBe(
-					"hello",
-				);
+				expect(parseAsStr(params.name, { required: true })).toBe("hello");
 			});
 
 			it("必須指定時に数値形式の文字列を返す", () => {
 				const params = parseSearchParams("https://example.com/?id=123");
-				expect(resolveQueryString(params.id, { required: true })).toBe("123");
+				expect(parseAsStr(params.id, { required: true })).toBe("123");
 			});
 
 			it("必須指定時にURLエンコードされた特殊文字をデコードして返す", () => {
 				const params = parseSearchParams(
 					"https://example.com/?email=hello%40example.com",
 				);
-				expect(resolveQueryString(params.email, { required: true })).toBe(
+				expect(parseAsStr(params.email, { required: true })).toBe(
 					"hello@example.com",
 				);
 			});
@@ -122,18 +116,14 @@ describe("resolveQueryString", () => {
 				const params = parseSearchParams(
 					"https://example.com/?tag=first&tag=second",
 				);
-				expect(resolveQueryString(params.tag, { required: true })).toBe(
-					"first",
-				);
+				expect(parseAsStr(params.tag, { required: true })).toBe("first");
 			});
 
 			it("必須指定時にURLエンコードされた日本語をデコードして返す", () => {
 				const params = parseSearchParams(
 					"https://example.com/?name=%E3%81%82%E3%81%84%E3%81%86",
 				);
-				expect(resolveQueryString(params.name, { required: true })).toBe(
-					"あいう",
-				);
+				expect(parseAsStr(params.name, { required: true })).toBe("あいう");
 			});
 		});
 
@@ -141,7 +131,7 @@ describe("resolveQueryString", () => {
 			it("undefinedの場合にカスタムエラーメッセージを投げる", () => {
 				const params = parseSearchParams("https://example.com");
 				expect(() =>
-					resolveQueryString(params.name, {
+					parseAsStr(params.name, {
 						required: true,
 						message: "Name is required",
 					}),
@@ -151,7 +141,7 @@ describe("resolveQueryString", () => {
 			it("空文字列の場合にカスタムエラーメッセージを投げる", () => {
 				const params = parseSearchParams("https://example.com/?name=");
 				expect(() =>
-					resolveQueryString(params.name, {
+					parseAsStr(params.name, {
 						required: true,
 						message: "Name is required",
 					}),
@@ -161,7 +151,7 @@ describe("resolveQueryString", () => {
 			it("カスタムメッセージ指定時に値を正常に返す", () => {
 				const params = parseSearchParams("https://example.com/?id=123");
 				expect(
-					resolveQueryString(params.id, {
+					parseAsStr(params.id, {
 						required: true,
 						message: "ID is required",
 					}),
@@ -173,7 +163,7 @@ describe("resolveQueryString", () => {
 					"https://example.com/?tag=first&tag=second",
 				);
 				expect(
-					resolveQueryString(params.tag, {
+					parseAsStr(params.tag, {
 						required: true,
 						message: "Tag is required",
 					}),
@@ -183,54 +173,54 @@ describe("resolveQueryString", () => {
 	});
 });
 
-describe("resolveQueryArray", () => {
+describe("parseAsArr", () => {
 	describe("flatなし", () => {
 		describe("デフォルトdelimiter (`,`)", () => {
 			it("undefinedの場合に空配列を返す", () => {
 				const params = parseSearchParams("https://example.com");
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual([]);
 			});
 
 			it("空文字列の場合に空配列を返す", () => {
 				const params = parseSearchParams("https://example.com/?tags=");
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual([]);
 			});
 
 			it("カンマ区切りの文字列を配列に分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a,b,c");
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual(["a", "b", "c"]);
 			});
 
 			it("区切り文字がない場合は単一要素の配列を返す", () => {
 				const params = parseSearchParams("https://example.com/?tag=hello");
-				const result = resolveQueryArray(params.tag);
+				const result = parseAsArr(params.tag);
 				expect(result).toEqual(["hello"]);
 			});
 
 			it("連続するカンマで生じる空要素を除外する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a,,b");
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual(["a", "b"]);
 			});
 
 			it("末尾のカンマで生じる空要素を除外する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a,b,");
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual(["a", "b"]);
 			});
 
 			it("先頭のカンマで生じる空要素を除外する", () => {
 				const params = parseSearchParams("https://example.com/?tags=,a,b");
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual(["a", "b"]);
 			});
 
 			it("同名パラメータが複数ある場合は配列にまとめる", () => {
 				const params = parseSearchParams("https://example.com/?tag=a&tag=b");
-				const result = resolveQueryArray(params.tag);
+				const result = parseAsArr(params.tag);
 				expect(result).toEqual(["a", "b"]);
 			});
 
@@ -238,7 +228,7 @@ describe("resolveQueryArray", () => {
 				const params = parseSearchParams(
 					"https://example.com/?tag=a&tag=&tag=b",
 				);
-				const result = resolveQueryArray(params.tag);
+				const result = parseAsArr(params.tag);
 				expect(result).toEqual(["a", "b"]);
 			});
 
@@ -246,7 +236,7 @@ describe("resolveQueryArray", () => {
 				const params = parseSearchParams(
 					"https://example.com/?tags=%E3%81%82%E3%81%84%E3%81%86,%E3%81%8B%E3%81%8D%E3%81%8F",
 				);
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual(["あいう", "かきく"]);
 			});
 
@@ -254,7 +244,7 @@ describe("resolveQueryArray", () => {
 				const params = parseSearchParams(
 					"https://example.com/?tags=%E3%81%82%E3%81%84%E3%81%86%2C%E3%81%8B%E3%81%8D%E3%81%8F",
 				);
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual(["あいう", "かきく"]);
 			});
 
@@ -262,7 +252,7 @@ describe("resolveQueryArray", () => {
 				const params = parseSearchParams(
 					"https://example.com/?tags=%E3%81%82%E3%81%84%E3%81%86&tags=%E3%81%8B%E3%81%8D%E3%81%8F",
 				);
-				const result = resolveQueryArray(params.tags);
+				const result = parseAsArr(params.tags);
 				expect(result).toEqual(["あいう", "かきく"]);
 			});
 		});
@@ -270,31 +260,31 @@ describe("resolveQueryArray", () => {
 		describe("カスタムdelimiter", () => {
 			it("パイプ区切りの文字列を配列に分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a|b|c");
-				const result = resolveQueryArray(params.tags, { delimiter: "|" });
+				const result = parseAsArr(params.tags, { delimiter: "|" });
 				expect(result).toEqual(["a", "b", "c"]);
 			});
 
 			it("URLエンコードされたパイプ区切り文字列を配列に分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a%7Cb%7Cc");
-				const result = resolveQueryArray(params.tags, { delimiter: "|" });
+				const result = parseAsArr(params.tags, { delimiter: "|" });
 				expect(result).toEqual(["a", "b", "c"]);
 			});
 
 			it("セミコロン区切りの文字列を配列に分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a;b;c");
-				const result = resolveQueryArray(params.tags, { delimiter: ";" });
+				const result = parseAsArr(params.tags, { delimiter: ";" });
 				expect(result).toEqual(["a", "b", "c"]);
 			});
 
 			it("URLエンコードされたセミコロン区切り文字列を配列に分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a%3Bb%3Bc");
-				const result = resolveQueryArray(params.tags, { delimiter: ";" });
+				const result = parseAsArr(params.tags, { delimiter: ";" });
 				expect(result).toEqual(["a", "b", "c"]);
 			});
 
 			it("正規表現で複数の区切り文字に対応（カンマとセミコロン）", () => {
 				const params = parseSearchParams("https://example.com/?tags=a,b;c");
-				const result = resolveQueryArray(params.tags, { delimiter: /[,;]/ });
+				const result = parseAsArr(params.tags, { delimiter: /[,;]/ });
 				expect(result).toEqual(["a", "b", "c"]);
 			});
 
@@ -302,7 +292,7 @@ describe("resolveQueryArray", () => {
 				const params = parseSearchParams(
 					"https://example.com/?tags=a%20%20b%20c",
 				);
-				const result = resolveQueryArray(params.tags, { delimiter: /\s+/ });
+				const result = parseAsArr(params.tags, { delimiter: /\s+/ });
 				expect(result).toEqual(["a", "b", "c"]);
 			});
 		});
@@ -312,7 +302,7 @@ describe("resolveQueryArray", () => {
 		describe("flat指定時の基本動作", () => {
 			it("カンマ区切り文字列を配列に分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a,b,c");
-				expect(resolveQueryArray(params.tags, { flat: true })).toEqual([
+				expect(parseAsArr(params.tags, { flat: true })).toEqual([
 					"a",
 					"b",
 					"c",
@@ -323,7 +313,7 @@ describe("resolveQueryArray", () => {
 				const params = parseSearchParams(
 					"https://example.com/?items=a,b&items=c",
 				);
-				expect(resolveQueryArray(params.items, { flat: true })).toEqual([
+				expect(parseAsArr(params.items, { flat: true })).toEqual([
 					"a",
 					"b",
 					"c",
@@ -332,17 +322,14 @@ describe("resolveQueryArray", () => {
 
 			it("区切り文字がない同名パラメータはそのまま配列にする", () => {
 				const params = parseSearchParams("https://example.com/?tag=a&tag=b");
-				expect(resolveQueryArray(params.tag, { flat: true })).toEqual([
-					"a",
-					"b",
-				]);
+				expect(parseAsArr(params.tag, { flat: true })).toEqual(["a", "b"]);
 			});
 
 			it("複数の同名パラメータをすべて分割してフラット化する", () => {
 				const params = parseSearchParams(
 					"https://example.com/?items=a,b,c&items=d,e",
 				);
-				expect(resolveQueryArray(params.items, { flat: true })).toEqual([
+				expect(parseAsArr(params.items, { flat: true })).toEqual([
 					"a",
 					"b",
 					"c",
@@ -353,67 +340,55 @@ describe("resolveQueryArray", () => {
 
 			it("undefinedの場合に空配列を返す", () => {
 				const params = parseSearchParams("https://example.com/");
-				expect(resolveQueryArray(params.items, { flat: true })).toEqual([]);
+				expect(parseAsArr(params.items, { flat: true })).toEqual([]);
 			});
 
 			it("空文字列の場合に空配列を返す", () => {
 				const params = parseSearchParams("https://example.com/?tags=");
-				expect(resolveQueryArray(params.tags, { flat: true })).toEqual([]);
+				expect(parseAsArr(params.tags, { flat: true })).toEqual([]);
 			});
 
 			it("連続するカンマで生じる空要素を除外する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a,,b");
-				expect(resolveQueryArray(params.tags, { flat: true })).toEqual([
-					"a",
-					"b",
-				]);
+				expect(parseAsArr(params.tags, { flat: true })).toEqual(["a", "b"]);
 			});
 
 			it("末尾のカンマで生じる空要素を除外する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a,b,");
-				expect(resolveQueryArray(params.tags, { flat: true })).toEqual([
-					"a",
-					"b",
-				]);
+				expect(parseAsArr(params.tags, { flat: true })).toEqual(["a", "b"]);
 			});
 
 			it("先頭のカンマで生じる空要素を除外する", () => {
 				const params = parseSearchParams("https://example.com/?tags=,a,b");
-				expect(resolveQueryArray(params.tags, { flat: true })).toEqual([
-					"a",
-					"b",
-				]);
+				expect(parseAsArr(params.tags, { flat: true })).toEqual(["a", "b"]);
 			});
 
 			it("配列に含まれる空文字列をフィルタリングする", () => {
 				const params = parseSearchParams(
 					"https://example.com/?tag=a&tag=&tag=b",
 				);
-				expect(resolveQueryArray(params.tag, { flat: true })).toEqual([
-					"a",
-					"b",
-				]);
+				expect(parseAsArr(params.tag, { flat: true })).toEqual(["a", "b"]);
 			});
 
 			it("カスタムdelimiterとflat指定でパイプ区切り文字列を分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a|b|c");
-				expect(
-					resolveQueryArray(params.tags, { delimiter: "|", flat: true }),
-				).toEqual(["a", "b", "c"]);
+				expect(parseAsArr(params.tags, { delimiter: "|", flat: true })).toEqual(
+					["a", "b", "c"],
+				);
 			});
 
 			it("カスタムdelimiterとflat指定でセミコロン区切り文字列を分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a;b;c");
-				expect(
-					resolveQueryArray(params.tags, { delimiter: ";", flat: true }),
-				).toEqual(["a", "b", "c"]);
+				expect(parseAsArr(params.tags, { delimiter: ";", flat: true })).toEqual(
+					["a", "b", "c"],
+				);
 			});
 
 			it("日本語のカンマ区切り文字列をフラット化する", () => {
 				const params = parseSearchParams(
 					"https://example.com/?tags=%E3%81%82%E3%81%84%E3%81%86,%E3%81%8B%E3%81%8D%E3%81%8F",
 				);
-				expect(resolveQueryArray(params.tags, { flat: true })).toEqual([
+				expect(parseAsArr(params.tags, { flat: true })).toEqual([
 					"あいう",
 					"かきく",
 				]);
@@ -424,7 +399,7 @@ describe("resolveQueryArray", () => {
 			it("flatDelimiterにパイプを指定して再分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a|b");
 				expect(
-					resolveQueryArray(params.tags, {
+					parseAsArr(params.tags, {
 						delimiter: ",",
 						flat: true,
 						flatDelimiter: "|",
@@ -437,7 +412,7 @@ describe("resolveQueryArray", () => {
 					"https://example.com/?items=a|b&items=c|d",
 				);
 				expect(
-					resolveQueryArray(params.items, {
+					parseAsArr(params.items, {
 						delimiter: ",",
 						flat: true,
 						flatDelimiter: "|",
@@ -448,7 +423,7 @@ describe("resolveQueryArray", () => {
 			it("flatDelimiterにセミコロンを指定して再分割する", () => {
 				const params = parseSearchParams("https://example.com/?tags=a;b;c");
 				expect(
-					resolveQueryArray(params.tags, {
+					parseAsArr(params.tags, {
 						delimiter: ",",
 						flat: true,
 						flatDelimiter: ";",
@@ -460,7 +435,7 @@ describe("resolveQueryArray", () => {
 				const params = parseSearchParams(
 					"https://example.com/?items=a,b&items=&items=c",
 				);
-				expect(resolveQueryArray(params.items, { flat: true })).toEqual([
+				expect(parseAsArr(params.items, { flat: true })).toEqual([
 					"a",
 					"b",
 					"c",
@@ -470,7 +445,7 @@ describe("resolveQueryArray", () => {
 			it("flatDelimiterに正規表現を指定して再分割（カンマとセミコロン）", () => {
 				const params = parseSearchParams("https://example.com/?tags=a,b;c");
 				expect(
-					resolveQueryArray(params.tags, {
+					parseAsArr(params.tags, {
 						delimiter: "&",
 						flat: true,
 						flatDelimiter: /[,;]/,
@@ -483,7 +458,7 @@ describe("resolveQueryArray", () => {
 					"https://example.com/?items=a%20b&items=c%20d",
 				);
 				expect(
-					resolveQueryArray(params.items, {
+					parseAsArr(params.items, {
 						delimiter: /&/,
 						flat: true,
 						flatDelimiter: /\s+/,
@@ -494,46 +469,46 @@ describe("resolveQueryArray", () => {
 	});
 });
 
-describe("resolveQueryBoolean", () => {
+describe("parseAsBool", () => {
 	it("undefinedの場合にfalseを返す", () => {
 		const params = parseSearchParams("https://example.com");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
 	it("空文字列の場合にfalseを返す", () => {
 		const params = parseSearchParams("https://example.com/?enabled=");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
 	it('"true"の場合にtrueを返す', () => {
 		const params = parseSearchParams("https://example.com/?enabled=true");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(true);
 	});
 
 	it('"false"の場合にfalseを返す', () => {
 		const params = parseSearchParams("https://example.com/?enabled=false");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
 	it('"1"の場合にfalseを返す', () => {
 		const params = parseSearchParams("https://example.com/?enabled=1");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
 	it('"0"の場合にfalseを返す', () => {
 		const params = parseSearchParams("https://example.com/?enabled=0");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
 	it("その他の文字列の場合にfalseを返す", () => {
 		const params = parseSearchParams("https://example.com/?enabled=yes");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
@@ -541,7 +516,7 @@ describe("resolveQueryBoolean", () => {
 		const params = parseSearchParams(
 			"https://example.com/?enabled=true&enabled=false",
 		);
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(true);
 	});
 
@@ -549,7 +524,7 @@ describe("resolveQueryBoolean", () => {
 		const params = parseSearchParams(
 			"https://example.com/?enabled=false&enabled=true",
 		);
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
@@ -557,25 +532,25 @@ describe("resolveQueryBoolean", () => {
 		const params = parseSearchParams(
 			"https://example.com/?enabled=&enabled=true",
 		);
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
 	it("大文字の場合にfalseを返す（厳密な比較）", () => {
 		const params = parseSearchParams("https://example.com/?enabled=True");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
 	it("大文字の場合にfalseを返す（すべて大文字）", () => {
 		const params = parseSearchParams("https://example.com/?enabled=TRUE");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(false);
 	});
 
 	it("URLエンコードされたtrueをデコードしてtrueを返す", () => {
 		const params = parseSearchParams("https://example.com/?enabled=true");
-		const result = resolveQueryBoolean(params.enabled);
+		const result = parseAsBool(params.enabled);
 		expect(result).toBe(true);
 	});
 });

@@ -1,25 +1,25 @@
 type SearchParamValue = string | string[] | undefined;
 
-interface ResolveQueryOptions {
+interface ParseAsStrOptions {
 	required?: boolean;
 	message?: string;
 }
 
-interface ResolveQueryOptionsRequired extends ResolveQueryOptions {
+interface ParseAsStrOptionsRequired extends ParseAsStrOptions {
 	required: true;
 }
 
-export function resolveQueryString(value: SearchParamValue): string | null;
+export function parseAsStr(value: SearchParamValue): string | null;
 
-export function resolveQueryString(
+export function parseAsStr(
 	value: SearchParamValue,
-	options: ResolveQueryOptionsRequired,
+	options: ParseAsStrOptionsRequired,
 ): string;
 
 // 実装
-export function resolveQueryString(
+export function parseAsStr(
 	value: SearchParamValue,
-	options?: ResolveQueryOptions,
+	options?: ParseAsStrOptions,
 ): string | null {
 	// 値の正規化
 	let resolved: string | null = null;
@@ -46,7 +46,7 @@ export function resolveQueryString(
 	return resolved;
 }
 
-export interface ResolveArrayOptions {
+export interface ParseAsArrOptions {
 	/**
 	 * 最初の split に使用する区切り文字
 	 * デフォルト: ","
@@ -67,14 +67,14 @@ export interface ResolveArrayOptions {
 }
 
 /**
- * resolveQueryArray
- * -----------------
+ * parseAsArr
+ * ----------
  * string | string[] | undefined → string[]
  */
-export function resolveQueryArray(
+export const parseAsArr = (
 	value: SearchParamValue,
-	options?: ResolveArrayOptions,
-): string[] {
+	options?: ParseAsArrOptions,
+): string[] => {
 	const delimiter = options?.delimiter ?? ",";
 	const flat = options?.flat ?? false;
 	const flatDelimiter = options?.flatDelimiter ?? delimiter;
@@ -99,15 +99,15 @@ export function resolveQueryArray(
 	}
 
 	return base;
-}
+};
 
 /**
- * resolveQueryBoolean
- * -------------------
+ * parseAsBool
+ * -----------
  * string | string[] | undefined → boolean
  * 文字列 "true" の場合のみ true を返し、それ以外は false を返す
  */
-export function resolveQueryBoolean(value: SearchParamValue): boolean {
+export const parseAsBool = (value: SearchParamValue): boolean => {
 	// falsy値（undefined、空文字列）の場合はfalse
 	if (!value) return false;
 
@@ -116,4 +116,4 @@ export function resolveQueryBoolean(value: SearchParamValue): boolean {
 
 	// 厳密に "true" の場合のみ true を返す
 	return resolved === "true";
-}
+};
