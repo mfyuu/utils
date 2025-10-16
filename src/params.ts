@@ -1,16 +1,66 @@
+/**
+ * Next.js App Router の searchParams の値の型
+ * string: 単一の値
+ * string[]: 同名パラメータが複数ある場合
+ * undefined: パラメータが存在しない場合
+ */
 type SearchParamValue = string | string[] | undefined;
 
+/**
+ * parseAsStr のオプション
+ */
 interface ParseAsStrOptions {
+	/**
+	 * 必須パラメータかどうか
+	 * true の場合、値が取得できない時に Error をスローする
+	 * @default false
+	 */
 	required?: boolean;
+
+	/**
+	 * required が true の時に投げるエラーメッセージ
+	 * @default "Missing required query parameter"
+	 */
 	message?: string;
 }
 
+/**
+ * required: true が指定された ParseAsStrOptions
+ */
 interface ParseAsStrOptionsRequired extends ParseAsStrOptions {
 	required: true;
 }
 
+/**
+ * クエリパラメータから文字列値を取得する
+ *
+ * @param value - SearchParamValue (string | string[] | undefined)
+ * @returns 取得できた文字列、または null
+ *
+ * @example
+ * ```ts
+ * const name = parseAsStr(searchParams.name); // string | null
+ * ```
+ */
 export function parseAsStr(value: SearchParamValue): string | null;
 
+/**
+ * クエリパラメータから文字列値を取得する（必須）
+ *
+ * @param value - SearchParamValue (string | string[] | undefined)
+ * @param options - ParseAsStrOptionsRequired (required: true)
+ * @returns 取得できた文字列（必ず string）
+ * @throws {Error} 値が取得できない場合
+ *
+ * @example
+ * ```ts
+ * const id = parseAsStr(searchParams.id, { required: true }); // string
+ * const name = parseAsStr(searchParams.name, {
+ *   required: true,
+ *   message: "Name is required"
+ * }); // string
+ * ```
+ */
 export function parseAsStr(
 	value: SearchParamValue,
 	options: ParseAsStrOptionsRequired,
@@ -46,30 +96,50 @@ export function parseAsStr(
 	return resolved;
 }
 
+/**
+ * parseAsArr のオプション
+ */
 export interface ParseAsArrOptions {
 	/**
 	 * 最初の split に使用する区切り文字
-	 * デフォルト: ","
+	 * @default ","
 	 */
 	delimiter?: string | RegExp;
 
 	/**
 	 * 各要素をさらに分割し flatten するかどうか
-	 * デフォルト: false
+	 * @default false
 	 */
 	flat?: boolean;
 
 	/**
 	 * flat 時の分割区切り文字
-	 * デフォルト: delimiter と同じ
+	 * @default delimiter と同じ
 	 */
 	flatDelimiter?: string | RegExp;
 }
 
 /**
- * parseAsArr
- * ----------
- * string | string[] | undefined → string[]
+ * クエリパラメータから配列値を取得する
+ *
+ * @param value - SearchParamValue (string | string[] | undefined)
+ * @param options - ParseAsArrOptions
+ * @returns 文字列の配列
+ *
+ * @example
+ * ```ts
+ * // デフォルト（カンマ区切り）
+ * const tags = parseAsArr(searchParams.tags); // string[]
+ * // "a,b,c" → ["a", "b", "c"]
+ *
+ * // カスタム区切り文字
+ * const ids = parseAsArr(searchParams.ids, { delimiter: "|" });
+ * // "1|2|3" → ["1", "2", "3"]
+ *
+ * // flat オプションで入れ子配列を平坦化
+ * const items = parseAsArr(searchParams.items, { flat: true });
+ * // ["a,b", "c"] → ["a", "b", "c"]
+ * ```
  */
 export const parseAsArr = (
 	value: SearchParamValue,
@@ -102,10 +172,26 @@ export const parseAsArr = (
 };
 
 /**
- * parseAsBool
- * -----------
- * string | string[] | undefined → boolean
+ * クエリパラメータから真偽値を取得する
+ *
  * 文字列 "true" の場合のみ true を返し、それ以外は false を返す
+ * "false", "1", "0", undefined なども全て false として扱う
+ *
+ * @param value - SearchParamValue (string | string[] | undefined)
+ * @returns true または false
+ *
+ * @example
+ * ```ts
+ * const enabled = parseAsBool(searchParams.enabled);
+ * // "true" → true
+ * // "false" → false
+ * // "1" → false
+ * // undefined → false
+ *
+ * // 配列の場合は最初の要素を評価
+ * // ["true", "false"] → true
+ * // ["false", "true"] → false
+ * ```
  */
 export const parseAsBool = (value: SearchParamValue): boolean => {
 	// falsy値（undefined、空文字列）の場合はfalse
