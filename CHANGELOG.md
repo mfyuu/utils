@@ -1,5 +1,19 @@
 # @mfyuu/utils
 
+## 0.2.0
+
+### Minor Changes
+
+- [#55](https://github.com/mfyuu/utils/pull/55) [`d3caa60`](https://github.com/mfyuu/utils/commit/d3caa600ebd38440dc722066c66f437e0714d449) Thanks [@mfyuu](https://github.com/mfyuu)! - Add query parameter utility functions for Next.js App Router
+
+  Introduces three utility functions to handle Next.js searchParams:
+
+  - parseAsStr: Extract string values with optional required validation
+  - parseAsArr: Extract array values with custom delimiters and flat option
+  - parseAsBool: Extract boolean values with strict "true" matching
+
+  All functions support the Next.js searchParams format (string | string[] | undefined) and include comprehensive JSDoc documentation with usage examples.
+
 ## 0.1.2
 
 ### Patch Changes
