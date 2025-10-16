@@ -100,3 +100,20 @@ export function resolveQueryArray(
 
 	return base;
 }
+
+/**
+ * resolveQueryBoolean
+ * -------------------
+ * string | string[] | undefined → boolean
+ * 文字列 "true" の場合のみ true を返し、それ以外は false を返す
+ */
+export function resolveQueryBoolean(value: SearchParamValue): boolean {
+	// falsy値（undefined、空文字列）の場合はfalse
+	if (!value) return false;
+
+	// 配列の場合は最初の要素を取得
+	const resolved = Array.isArray(value) ? value[0] : value;
+
+	// 厳密に "true" の場合のみ true を返す
+	return resolved === "true";
+}

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { resolveQueryArray, resolveQueryString } from "./params";
+import {
+	resolveQueryArray,
+	resolveQueryBoolean,
+	resolveQueryString,
+} from "./params";
 
 /**
  * 完全なURLからNext.js v15のsearchParams形式に変換するヘルパー
@@ -487,5 +491,91 @@ describe("resolveQueryArray", () => {
 				).toEqual(["a", "b", "c", "d"]);
 			});
 		});
+	});
+});
+
+describe("resolveQueryBoolean", () => {
+	it("undefinedの場合にfalseを返す", () => {
+		const params = parseSearchParams("https://example.com");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it("空文字列の場合にfalseを返す", () => {
+		const params = parseSearchParams("https://example.com/?enabled=");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it('"true"の場合にtrueを返す', () => {
+		const params = parseSearchParams("https://example.com/?enabled=true");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(true);
+	});
+
+	it('"false"の場合にfalseを返す', () => {
+		const params = parseSearchParams("https://example.com/?enabled=false");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it('"1"の場合にfalseを返す', () => {
+		const params = parseSearchParams("https://example.com/?enabled=1");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it('"0"の場合にfalseを返す', () => {
+		const params = parseSearchParams("https://example.com/?enabled=0");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it("その他の文字列の場合にfalseを返す", () => {
+		const params = parseSearchParams("https://example.com/?enabled=yes");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it('配列["true"]の場合にtrueを返す', () => {
+		const params = parseSearchParams(
+			"https://example.com/?enabled=true&enabled=false",
+		);
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(true);
+	});
+
+	it('配列["false"]の場合にfalseを返す', () => {
+		const params = parseSearchParams(
+			"https://example.com/?enabled=false&enabled=true",
+		);
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it("配列の最初の要素が空文字列の場合にfalseを返す", () => {
+		const params = parseSearchParams(
+			"https://example.com/?enabled=&enabled=true",
+		);
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it("大文字の場合にfalseを返す（厳密な比較）", () => {
+		const params = parseSearchParams("https://example.com/?enabled=True");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it("大文字の場合にfalseを返す（すべて大文字）", () => {
+		const params = parseSearchParams("https://example.com/?enabled=TRUE");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(false);
+	});
+
+	it("URLエンコードされたtrueをデコードしてtrueを返す", () => {
+		const params = parseSearchParams("https://example.com/?enabled=true");
+		const result = resolveQueryBoolean(params.enabled);
+		expect(result).toBe(true);
 	});
 });
