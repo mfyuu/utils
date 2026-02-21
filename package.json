@@ -48,7 +48,7 @@
 	},
 	"devDependencies": {
 		"@antfu/ni": "^28.0.0",
-		"@biomejs/biome": "2.4.3",
+		"@biomejs/biome": "2.4.4",
 		"@changesets/changelog-github": "^0.5.1",
 		"@changesets/cli": "^2.29.6",
 		"@mfyuu/biome-config": "^1.0.0",
