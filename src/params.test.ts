@@ -1,3 +1,4 @@
+import { URL } from "node:url";
 import { describe, expect, it } from "vitest";
 import { parseAsArr, parseAsBool, parseAsStr } from "./params";
 
