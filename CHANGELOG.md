@@ -1,4 +1,10 @@
-# @mfyuu/utils
+# @lemtoc/utils
+
+## 0.2.1
+
+### Patch Changes
+
+- Renamed package scope from `@mfyuu/utils` to `@lemtoc/utils`. Existing users should update their `package.json` dependencies accordingly. The old package will be deprecated on npm with a pointer to this new name.
 
 ## 0.2.0
 

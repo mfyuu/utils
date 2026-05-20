@@ -1,17 +1,17 @@
 {
-	"name": "@mfyuu/utils",
+	"name": "@lemtoc/utils",
 	"type": "module",
-	"version": "0.2.0",
-	"description": "Opinionated collection of common JavaScript / TypeScript utils by @mfyuu",
-	"author": "mfyuu",
+	"version": "0.2.1",
+	"description": "Opinionated collection of common JavaScript / TypeScript utils by @lemtoc",
+	"author": "lemtoc",
 	"license": "MIT",
-	"homepage": "https://github.com/mfyuu/utils",
+	"homepage": "https://github.com/lemtoc/utils",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/mfyuu/utils.git"
+		"url": "git+https://github.com/lemtoc/utils.git"
 	},
 	"bugs": {
-		"url": "https://github.com/mfyuu/utils/issues"
+		"url": "https://github.com/lemtoc/utils/issues"
 	},
 	"keywords": [
 		"utils"
@@ -27,7 +27,8 @@
 		"dist"
 	],
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"registry": "https://registry.npmjs.org"
 	},
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
@@ -51,7 +52,7 @@
 		"@biomejs/biome": "2.4.15",
 		"@changesets/changelog-github": "^0.7.0",
 		"@changesets/cli": "^2.29.6",
-		"@mfyuu/biome-config": "^1.0.0",
+		"@lemtoc/biome-config": "^1.0.0",
 		"@types/node": "^24.3.0",
 		"lefthook": "^2.0.0",
 		"tsx": "^4.20.4",
