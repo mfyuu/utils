@@ -1,2 +1,4 @@
-onlyBuiltDependencies:
-  - esbuild
+allowBuilds:
+  '@lemtoc/biome-config': true
+  esbuild: true
+  lefthook: true
