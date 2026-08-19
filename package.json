@@ -50,13 +50,13 @@
 	"devDependencies": {
 		"@antfu/ni": "^30.0.0",
 		"@biomejs/biome": "2.4.15",
-		"@changesets/changelog-github": "^0.7.0",
-		"@changesets/cli": "^2.29.6",
+		"@changesets/changelog-github": "^1.0.0",
+		"@changesets/cli": "^3.0.0",
 		"@lemtoc/biome-config": "^1.0.0",
 		"@types/node": "^24.3.0",
 		"lefthook": "^2.0.0",
 		"tsx": "^4.20.4",
-		"typescript": "^6.0.0",
+		"typescript": "^7.0.0",
 		"unbuild": "^3.6.1",
 		"vite": "^8.0.0",
 		"vitest": "^4.0.0"
