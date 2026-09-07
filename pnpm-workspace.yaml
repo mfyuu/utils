@@ -1,4 +1,6 @@
 allowBuilds:
-  '@lemtoc/biome-config': true
+  '@xrryx/biome-config': true
   esbuild: true
   lefthook: true
+minimumReleaseAgeExclude:
+  - '@xrryx/biome-config@1.4.3'
