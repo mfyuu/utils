@@ -1,8 +1,14 @@
-# @lemtoc/utils
+# @xrryx/utils
 
 ## 0.2.1
 
 ### Patch Changes
+
+- Renamed package scope from `@ve62ca/utils` to `@xrryx/utils` following the maintainer's npm username change. Existing users should update their `package.json` dependencies accordingly. The old package will be deprecated on npm with a pointer to this new name.
+
+- Renamed package scope from `@lemtoc/utils` to `@ve62ca/utils` following the maintainer's npm username change. Existing users should update their `package.json` dependencies accordingly. The old package will be deprecated on npm with a pointer to this new name.
+
+- Removed the package-manager enforcement `preinstall` script so npm, Yarn, pnpm, and Bun consumers can install the package.
 
 - Renamed package scope from `@mfyuu/utils` to `@lemtoc/utils`. Existing users should update their `package.json` dependencies accordingly. The old package will be deprecated on npm with a pointer to this new name.
 

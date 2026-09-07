@@ -1,17 +1,17 @@
 {
-	"name": "@lemtoc/utils",
+	"name": "@xrryx/utils",
 	"type": "module",
 	"version": "0.2.1",
-	"description": "Opinionated collection of common JavaScript / TypeScript utils by @lemtoc",
-	"author": "lemtoc",
+	"description": "Opinionated collection of common JavaScript / TypeScript utils by @xrryx",
+	"author": "xrryx",
 	"license": "MIT",
-	"homepage": "https://github.com/lemtoc/utils",
+	"homepage": "https://github.com/xrryx/utils",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/lemtoc/utils.git"
+		"url": "git+https://github.com/xrryx/utils.git"
 	},
 	"bugs": {
-		"url": "https://github.com/lemtoc/utils/issues"
+		"url": "https://github.com/xrryx/utils/issues"
 	},
 	"keywords": [
 		"utils"
@@ -31,7 +31,6 @@
 		"registry": "https://registry.npmjs.org"
 	},
 	"scripts": {
-		"preinstall": "npx only-allow pnpm",
 		"prepare": "node -e \"if(process.env.CI !== 'true') { require('child_process').execSync('lefthook install', {stdio: 'inherit'}) }\"",
 		"build": "unbuild",
 		"dev": "unbuild --stub",
@@ -48,18 +47,18 @@
 		"release": "nr build && changeset publish"
 	},
 	"devDependencies": {
-		"@antfu/ni": "^30.0.0",
+		"@antfu/ni": "^30.5.0",
 		"@biomejs/biome": "2.4.15",
 		"@changesets/changelog-github": "^0.7.0",
-		"@changesets/cli": "^2.29.6",
-		"@lemtoc/biome-config": "^1.0.0",
-		"@types/node": "^24.3.0",
-		"lefthook": "^2.0.0",
-		"tsx": "^4.20.4",
-		"typescript": "^6.0.0",
+		"@changesets/cli": "^2.31.1",
+		"@types/node": "^24.13.3",
+		"@xrryx/biome-config": "^1.4.3",
+		"lefthook": "^2.1.12",
+		"tsx": "^4.23.13",
+		"typescript": "^6.0.3",
 		"unbuild": "^3.6.1",
-		"vite": "^8.0.0",
-		"vitest": "^4.0.0"
+		"vite": "^8.2.2",
+		"vitest": "^4.1.11"
 	},
 	"packageManager": "pnpm@11.3.0"
 }
